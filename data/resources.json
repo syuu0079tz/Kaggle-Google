@@ -1,0 +1,160 @@
+{
+  "resources": [
+    {
+      "id": "monash-emergency-security",
+      "name": "Monash Emergency and Campus Security",
+      "category": "Crisis and immediate safety",
+      "location": "Monash campuses and off campus",
+      "tags": ["crisis", "emergency", "health", "safety"],
+      "eligibility": "Anyone facing immediate danger on a Monash campus or needing emergency routing.",
+      "contact": "On campus: 03 9905 3333 or 333 from a Monash phone. Off campus emergency: 000.",
+      "url": "https://www.monash.edu/about/safety-security",
+      "hours": "24/7",
+      "safety_notes": "Use immediately for danger, violence, medical emergency, or urgent campus safety risk."
+    },
+    {
+      "id": "lifeline-australia",
+      "name": "Lifeline Australia",
+      "category": "Crisis support",
+      "location": "Australia-wide phone, text and online",
+      "tags": ["crisis", "wellbeing", "health", "emergency"],
+      "eligibility": "Anyone in Australia who is overwhelmed, in crisis, or thinking about suicide.",
+      "contact": "Call 13 11 14, text 0477 13 11 14, or use Lifeline online chat.",
+      "url": "https://www.lifeline.org.au/",
+      "hours": "24/7",
+      "safety_notes": "If life is in danger, call 000 first."
+    },
+    {
+      "id": "monash-counselling",
+      "name": "Monash Counselling for Students",
+      "category": "Mental health and wellbeing",
+      "location": "Monash campus and Telehealth",
+      "tags": ["wellbeing", "health", "crisis"],
+      "eligibility": "Monash students.",
+      "contact": "Book through Monash counselling appointments. Specialist sexual harm/family violence appointments: call University Health Services on (03) 9905 3175.",
+      "url": "https://www.monash.edu/students/support/health/counselling",
+      "hours": "Appointments by service availability; after-hours support listed on the official page.",
+      "safety_notes": "Not a substitute for emergency services. For immediate danger call 000 or Monash Security."
+    },
+    {
+      "id": "beyond-blue",
+      "name": "Beyond Blue Support Service",
+      "category": "Mental health support",
+      "location": "Australia-wide phone and online",
+      "tags": ["wellbeing", "health", "general_support"],
+      "eligibility": "Anyone in Australia needing brief mental health counselling or support navigation.",
+      "contact": "Call 1300 22 4636 or chat online through Beyond Blue.",
+      "url": "https://www.beyondblue.org.au/get-support",
+      "hours": "24/7",
+      "safety_notes": "Use for brief counselling and mental health support; use emergency services for immediate danger."
+    },
+    {
+      "id": "monash-academic-success",
+      "name": "Monash Student Academic Success",
+      "category": "Study and academic support",
+      "location": "Monash online and campus services",
+      "tags": ["academic", "general_support", "international"],
+      "eligibility": "Monash students.",
+      "contact": "Use the official Student Academic Success page to speak to an adviser, explore Learn HQ resources, or find workshops.",
+      "url": "https://www.monash.edu/student-academic-success/home",
+      "hours": "Online resources available anytime; consultations and workshops by booking availability.",
+      "safety_notes": "Can help with study skills, assessment preparation and academic language, but cannot change grades."
+    },
+    {
+      "id": "monash-financial-assistance",
+      "name": "Monash Financial Assistance",
+      "category": "Financial support",
+      "location": "Monash online and Australian campuses",
+      "tags": ["finance", "housing", "food", "general_support"],
+      "eligibility": "Monash students seeking financial assistance, budgeting, grants, loans, or cost-of-living support.",
+      "contact": "Message Monash Connect, make an enquiry, or call +61 3 9902 6011 from the official Financial Assistance page.",
+      "url": "https://www.monash.edu/students/support/financial-assistance",
+      "hours": "Monash Connect availability varies; official page provides current enquiry channels.",
+      "safety_notes": "Never share bank passwords, card numbers, or one-time codes."
+    },
+    {
+      "id": "monash-accommodation",
+      "name": "Monash Accommodation and Housing Services",
+      "category": "Housing and accommodation support",
+      "location": "Monash online and Australian campuses",
+      "tags": ["housing", "finance", "international", "general_support"],
+      "eligibility": "Monash students seeking accommodation or housing support.",
+      "contact": "Message Monash Connect, make an enquiry, or call +61 3 9902 6011 from the official Accommodation page.",
+      "url": "https://www.monash.edu/students/support/accommodation",
+      "hours": "Monash Connect availability varies; official page provides current enquiry channels.",
+      "safety_notes": "For unsafe housing or immediate danger, use emergency or crisis services first."
+    },
+    {
+      "id": "monash-international-students",
+      "name": "Monash International Current Students",
+      "category": "International student services",
+      "location": "Monash online and Australian campuses",
+      "tags": ["international", "academic", "finance", "housing", "legal"],
+      "eligibility": "Current Monash international students.",
+      "contact": "Message Monash Connect, make an enquiry, or call +61 3 9902 6011 from the official International Students page.",
+      "url": "https://www.monash.edu/students/support/international",
+      "hours": "Monash Connect availability varies; official page provides current enquiry channels.",
+      "safety_notes": "For visa or immigration law questions, use official university guidance and qualified advisers."
+    },
+    {
+      "id": "monash-disability-support",
+      "name": "Monash Disability Support Services",
+      "category": "Disability and accessibility",
+      "location": "Monash online and campus services",
+      "tags": ["accessibility", "academic", "health"],
+      "eligibility": "Monash undergraduate and graduate students with visible or non-visible disabilities, medical conditions, mental health conditions, or caring responsibilities.",
+      "contact": "Register for assistance, make an online enquiry, or contact a staff member through the official DSS page.",
+      "url": "https://www.monash.edu/students/support/disability",
+      "hours": "Online registration and enquiry options available; appointments by service availability.",
+      "safety_notes": "Share supporting documents only through official Monash channels."
+    },
+    {
+      "id": "ask-izzy",
+      "name": "Ask Izzy Service Finder",
+      "category": "Community food, housing and money help",
+      "location": "Australia-wide local service finder",
+      "tags": ["food", "housing", "finance", "legal", "general_support"],
+      "eligibility": "Anyone in Australia looking for nearby support services.",
+      "contact": "Use Ask Izzy to search by need and location for food, housing, money help, counselling, legal help and everyday needs.",
+      "url": "https://askizzy.org.au/",
+      "hours": "Online service finder available anytime; provider hours vary.",
+      "safety_notes": "Check the listed provider's current opening hours before travelling."
+    },
+    {
+      "id": "monash-careers",
+      "name": "Monash Careers and Employability",
+      "category": "Career and employability",
+      "location": "Monash online and campus services",
+      "tags": ["career", "finance", "general_support", "international"],
+      "eligibility": "Monash students looking for career advice, jobs, internships, networking, leadership programs, or workforce preparation.",
+      "contact": "Use the official Careers page, Careers and Internships Studio, and Monash jobs board links.",
+      "url": "https://www.monash.edu/students/careers",
+      "hours": "Online resources available anytime; events and studio availability vary.",
+      "safety_notes": "Avoid sharing identity documents with unverified employers."
+    },
+    {
+      "id": "monash-connect",
+      "name": "Monash Connect",
+      "category": "General student support routing",
+      "location": "Monash online and phone support",
+      "tags": ["general_support", "academic", "wellbeing", "finance", "international", "housing"],
+      "eligibility": "Current Monash students who are unsure which service to contact.",
+      "contact": "Message Monash Connect, make an enquiry, or call +61 3 9902 6011.",
+      "url": "https://www.monash.edu/students/support/connect",
+      "hours": "Official page provides current messaging, enquiry and phone channels.",
+      "safety_notes": "Use as a first routing point when the right support service is unclear."
+    },
+    {
+      "id": "1800respect",
+      "name": "1800RESPECT",
+      "category": "Domestic, family and sexual violence support",
+      "location": "Australia-wide phone, text and online",
+      "tags": ["crisis", "wellbeing", "health", "legal", "safety"],
+      "eligibility": "People impacted by domestic, family or sexual violence in Australia.",
+      "contact": "Call 1800 737 732, text 0458 737 732, chat online, or video call through 1800RESPECT.",
+      "url": "https://1800respect.org.au/",
+      "hours": "24/7",
+      "safety_notes": "Call 000 if you are in danger."
+    }
+  ]
+}

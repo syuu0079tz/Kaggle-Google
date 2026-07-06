@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="360" viewBox="0 0 920 360" role="img" aria-labelledby="title desc">
+  <title id="title">CareCompass multi-agent workflow</title>
+  <desc id="desc">A four step workflow: intake, resource matching, planning, and safety review.</desc>
+  <rect width="920" height="360" fill="#ffffff"/>
+  <line x1="178" y1="176" x2="284" y2="176" stroke="#64748b" stroke-width="3"/>
+  <line x1="398" y1="176" x2="504" y2="176" stroke="#64748b" stroke-width="3"/>
+  <line x1="618" y1="176" x2="724" y2="176" stroke="#64748b" stroke-width="3"/>
+  <polygon points="284,176 268,166 268,186" fill="#64748b"/>
+  <polygon points="504,176 488,166 488,186" fill="#64748b"/>
+  <polygon points="724,176 708,166 708,186" fill="#64748b"/>
+  <rect x="42" y="92" width="136" height="168" rx="8" fill="#eef5ff" stroke="#2457a6" stroke-width="2"/>
+  <rect x="284" y="92" width="136" height="168" rx="8" fill="#f1f8f4" stroke="#1e7a5a" stroke-width="2"/>
+  <rect x="504" y="92" width="136" height="168" rx="8" fill="#fff7e8" stroke="#9a6518" stroke-width="2"/>
+  <rect x="724" y="92" width="154" height="168" rx="8" fill="#f6f2ff" stroke="#6b4ba3" stroke-width="2"/>
+  <text x="110" y="137" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#17202a">Intake</text>
+  <text x="110" y="166" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">Needs</text>
+  <text x="110" y="186" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">urgency</text>
+  <text x="110" y="206" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">PII redaction</text>
+  <text x="352" y="137" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#17202a">Matcher</text>
+  <text x="352" y="166" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">MCP tool</text>
+  <text x="352" y="186" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">catalog search</text>
+  <text x="352" y="206" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">ranking</text>
+  <text x="572" y="137" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#17202a">Planner</text>
+  <text x="572" y="166" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">Next steps</text>
+  <text x="572" y="186" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">backup path</text>
+  <text x="572" y="206" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">minimal data</text>
+  <text x="801" y="137" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#17202a">Safety Review</text>
+  <text x="801" y="166" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">Guardrails</text>
+  <text x="801" y="186" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">escalation</text>
+  <text x="801" y="206" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13" fill="#415166">safe trace</text>
+  <text x="460" y="315" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="15" fill="#5d6978">Agent skills are loaded only when each specialist runs.</text>
+</svg>
+
