@@ -80,6 +80,19 @@ Run local evaluations:
 python scripts/run_evals.py
 ```
 
+## Public Demo Deployment
+
+The app is ready for Docker-based hosting on Render, Railway, Cloud Run, or similar platforms. It reads the platform `PORT` environment variable and defaults to `8080` locally.
+
+Fastest public demo path:
+
+1. Push this repository to GitHub.
+2. Open Render and create a new Blueprint or Web Service from the repository.
+3. Use the included `render.yaml` or Dockerfile.
+4. After deployment, open the generated Render URL and add it to the Kaggle writeup as the live demo link.
+
+Do not submit `http://127.0.0.1:8080` as a project link because judges cannot access local URLs.
+
 ## Optional ADK and MCP Setup
 
 The core app has no third-party dependencies. To demonstrate the Google ADK and official MCP SDK paths:

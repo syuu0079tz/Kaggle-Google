@@ -9,5 +9,4 @@ COPY . /app
 
 EXPOSE 8080
 
-CMD ["python", "-m", "care_compass.web", "--host", "0.0.0.0", "--port", "8080"]
-
+CMD ["python", "-m", "care_compass.web", "--host", "0.0.0.0"]

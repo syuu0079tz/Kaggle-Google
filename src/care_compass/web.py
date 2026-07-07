@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from html import escape
 import json
+import os
 import random
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -485,7 +486,7 @@ class Handler(BaseHTTPRequestHandler):
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the CareCompass web demo.")
     parser.add_argument("--host", default="127.0.0.1")
-    parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", "8080")))
     args = parser.parse_args(argv)
 
     server = ThreadingHTTPServer((args.host, args.port), Handler)

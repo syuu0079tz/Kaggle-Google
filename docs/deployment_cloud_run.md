@@ -1,6 +1,6 @@
 # Deployment Notes
 
-The app runs without third-party dependencies and listens on port 8080 in the Dockerfile.
+The app runs without third-party dependencies. It reads the platform `PORT` environment variable and defaults to port 8080 locally.
 
 ## Local Container
 
@@ -27,6 +27,24 @@ gcloud run deploy care-compass-agent \
 ```
 
 If you use the optional ADK/Gemini path, configure secrets through Cloud Run environment variables or Secret Manager. Do not commit API keys or passwords to the repository.
+
+## Render
+
+The repository includes `render.yaml` for a Docker-based Render web service.
+
+Recommended UI path:
+
+1. Go to Render and create a new Blueprint or Web Service.
+2. Connect the GitHub repository.
+3. Select the Docker environment.
+4. Deploy the service.
+5. Use the generated `https://...onrender.com` URL as the Kaggle live demo link.
+
+The free plan may sleep after inactivity, so the first request can take a short time to wake up.
+
+## Railway
+
+Railway can also deploy this repository from GitHub using the Dockerfile. Create a new project from the GitHub repository, deploy it, and use the generated public domain as the Kaggle live demo link.
 
 ## Production Data
 
