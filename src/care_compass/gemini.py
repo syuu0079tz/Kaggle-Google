@@ -160,12 +160,11 @@ def _interactions_body(model: str, plan: dict[str, Any], redacted_request: str) 
 
 def _generate_content_body(plan: dict[str, Any], redacted_request: str) -> dict[str, Any]:
     return {
-        "system_instruction": {
+        "systemInstruction": {
             "parts": [{"text": SYSTEM_INSTRUCTION}],
         },
         "contents": [
             {
-                "role": "user",
                 "parts": [{"text": _review_payload(plan, redacted_request)}],
             }
         ],
@@ -175,8 +174,11 @@ def _generate_content_body(plan: dict[str, Any], redacted_request: str) -> dict[
     }
 
 
-def _generate_content_url(model: str) -> str:
-    return f"{GENERATE_CONTENT_BASE_URL}/{quote(model, safe='')}:generateContent"
+def _generate_content_url(model: str, api_key: str) -> str:
+    return (
+        f"{GENERATE_CONTENT_BASE_URL}/{quote(model, safe='')}:generateContent"
+        f"?key={quote(api_key, safe='')}"
+    )
 
 
 def _call_gemini(
@@ -202,7 +204,7 @@ def _call_gemini(
     for model in gemini_candidate_models():
         try:
             payload = _post_json(
-                _generate_content_url(model),
+                _generate_content_url(model, api_key),
                 _generate_content_body(plan, redacted_request),
                 api_key,
                 timeout_seconds,
