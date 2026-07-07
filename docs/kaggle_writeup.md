@@ -24,18 +24,19 @@ The app is out of scope for counselling, emergency response, legal, visa, medica
 
 ## Solution
 
-CareCompass uses a four-agent workflow:
+CareCompass uses a multi-agent workflow:
 
 1. Intake Agent redacts PII and classifies need categories such as academic, wellbeing, finance, housing, international support, health, accessibility, career, legal, or crisis.
 2. Resource Matcher Agent calls an allowlisted catalog tool. It ranks support resources by detected needs, location, urgency, and safety relevance.
 3. Planner Agent creates a short next-step plan with a first contact, backup path, preparation guidance, and a privacy reminder.
 4. Safety Reviewer Agent adds guardrails, crisis escalation language, and a safe public trace.
+5. Gemini Review Agent calls Google Gemini in the deployed demo when `GEMINI_API_KEY` is configured. It reviews the final plan but cannot add new resource names, contact details, URLs, or advice outside the verified catalog.
 
 The user gets a concise plan instead of a long essay. Judges can inspect the agent trace without seeing private phone numbers, email addresses, or student identifiers.
 
 ## Course Concepts Demonstrated
 
-**Agent / multi-agent system.** The deterministic implementation is in `src/care_compass/agents.py`, coordinated by `CareCompassOrchestrator`. The ADK-ready entrypoint in `src/care_compass/adk_app.py` exposes the same workflow as a Google ADK tool.
+**Agent / multi-agent system.** The implementation is in `src/care_compass/agents.py`, coordinated by `CareCompassOrchestrator`. The deployed app runs deterministic specialist agents and includes a default Gemini model review agent through `GEMINI_API_KEY`. The ADK-ready entrypoint in `src/care_compass/adk_app.py` exposes the same workflow as a Google ADK tool.
 
 **MCP server.** `src/care_compass/mcp_server.py` exposes the catalog and safety tools over a dependency-free JSON-RPC server. `src/care_compass/mcp_fastmcp.py` shows the official FastMCP path when optional MCP dependencies are installed.
 
@@ -47,7 +48,7 @@ The user gets a concise plan instead of a long essay. Judges can inspect the age
 
 ## Technical Implementation
 
-The core app uses Python standard library modules only, which makes it easy to run in Kaggle, locally, or in a container. The web demo is served by `http.server`, and the CLI is available through `python -m care_compass.cli`. The local catalog is stored in `data/resources.json`.
+The core app uses Python standard library modules only, which makes it easy to run in Kaggle, locally, or in a container. The Gemini Review Agent also uses the standard library HTTP client, so no extra package is required after an API key is configured. The web demo is served by `http.server`, and the CLI is available through `python -m care_compass.cli`. The local catalog is stored in `data/resources.json`.
 
 The most important design choice is that the agent is not allowed to invent resources or tools. It can only call `search_resources`, `get_resource`, and `safety_check` through `ToolRegistry`. This keeps behavior auditable and reduces the risk of hallucinated support routes.
 

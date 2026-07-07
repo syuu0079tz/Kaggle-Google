@@ -81,6 +81,31 @@ def _result_html(result: dict[str, object] | None, error: str = "") -> str:
     )
     steps = "".join(f"<li>{escape(str(step))}</li>" for step in result["next_steps"])
     notices = "".join(f"<li>{escape(str(notice))}</li>" for notice in safety["notices"])
+    model_review = result.get("model_review", {})
+    model_summary = escape(str(model_review.get("summary", "")))
+    model_status = escape(str(model_review.get("status", "")))
+    model_name = escape(str(model_review.get("model", "")))
+    model_message = escape(str(model_review.get("message", "")))
+    if model_summary:
+        model_review_html = f"""
+          <div>
+            <h2>AI Model Review</h2>
+            <div class="status">
+              <div class="meta">Google Gemini | {model_name} | {model_status}</div>
+              <pre>{model_summary}</pre>
+            </div>
+          </div>
+        """
+    else:
+        model_review_html = f"""
+          <div>
+            <h2>AI Model Review</h2>
+            <div class="status warning">
+              <div class="meta">Google Gemini | {model_name} | {model_status}</div>
+              {model_message}
+            </div>
+          </div>
+        """
     trace = escape(json.dumps(result["agent_trace"], indent=2, ensure_ascii=False))
 
     return f"""
@@ -100,6 +125,7 @@ def _result_html(result: dict[str, object] | None, error: str = "") -> str:
         <h2>Safety Notices</h2>
         <ul>{notices}</ul>
       </div>
+      {model_review_html}
       <div>
         <h2>Safe Trace</h2>
         <pre>{trace}</pre>
@@ -379,7 +405,7 @@ def render_page(
 <body>
   <header>
     <h1>CareCompass Agent</h1>
-    <p class="subtitle">A privacy-first multi-agent routing assistant for Monash students in Australia. Built for the Kaggle/Google AI Agents capstone.</p>
+    <p class="subtitle">A privacy-first multi-agent routing assistant for Monash students in Australia, with a default Gemini review agent for the deployed demo.</p>
   </header>
   <main>
     <section>

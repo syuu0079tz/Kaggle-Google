@@ -1,6 +1,6 @@
 # Deployment Notes
 
-The app runs without third-party dependencies. It reads the platform `PORT` environment variable and defaults to port 8080 locally.
+The app runs without third-party Python dependencies. It reads the platform `PORT` environment variable and defaults to port 8080 locally. The default production workflow uses Gemini Review Agent, so the public demo should set `GEMINI_API_KEY`.
 
 ## Local Container
 
@@ -26,7 +26,7 @@ gcloud run deploy care-compass-agent \
   --allow-unauthenticated
 ```
 
-If you use the optional ADK/Gemini path, configure secrets through Cloud Run environment variables or Secret Manager. Do not commit API keys or passwords to the repository.
+Configure `GEMINI_API_KEY` through Cloud Run environment variables or Secret Manager. Set `GEMINI_MODEL=gemini-3.5-flash` unless you intentionally choose another supported Gemini model. Do not commit API keys or passwords to the repository.
 
 ## Render
 
@@ -37,8 +37,11 @@ Recommended UI path:
 1. Go to Render and create a new Blueprint or Web Service.
 2. Connect the GitHub repository.
 3. Select the Docker environment.
-4. Deploy the service.
-5. Use the generated `https://...onrender.com` URL as the Kaggle live demo link.
+4. Add environment variables:
+   - `GEMINI_API_KEY`: your Google AI Studio API key.
+   - `GEMINI_MODEL`: `gemini-3.5-flash`.
+5. Deploy the service.
+6. Use the generated `https://...onrender.com` URL as the Kaggle live demo link.
 
 The free plan may sleep after inactivity, so the first request can take a short time to wake up.
 

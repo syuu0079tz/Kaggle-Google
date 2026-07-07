@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from .gemini import generate_model_review
 from .models import AgentTrace
 from .security import SafetyReport, analyze_request
 from .skills import skill_summary
@@ -179,6 +180,32 @@ class SafetyReviewerAgent:
         return final, trace
 
 
+class ModelReviewAgent:
+    name = "model_review_agent"
+    skill_name = "followup_plan"
+
+    def run(self, plan: dict[str, Any], redacted_request: str) -> tuple[dict[str, Any], AgentTrace]:
+        review = generate_model_review(plan, redacted_request)
+        if review["status"] == "skipped_no_api_key":
+            action = "skipped_no_api_key"
+        elif review["status"] == "ok":
+            action = "called_gemini_interactions_api"
+        else:
+            action = "model_review_unavailable"
+
+        trace = AgentTrace(
+            agent=self.name,
+            action=action,
+            details={
+                "provider": review["provider"],
+                "model": review["model"],
+                "status": review["status"],
+                "skill_loaded": skill_summary(self.skill_name),
+            },
+        )
+        return review, trace
+
+
 class CareCompassOrchestrator:
     """Sequential multi-agent workflow."""
 
@@ -188,6 +215,7 @@ class CareCompassOrchestrator:
         self.matcher_agent = ResourceMatcherAgent(self.tools)
         self.planner_agent = PlannerAgent()
         self.safety_agent = SafetyReviewerAgent()
+        self.model_review_agent = ModelReviewAgent()
 
     def run(self, user_text: str) -> dict[str, Any]:
         traces: list[AgentTrace] = []
@@ -203,7 +231,11 @@ class CareCompassOrchestrator:
         final, trace = self.safety_agent.run(plan, safety)
         traces.append(trace)
 
+        model_review, trace = self.model_review_agent.run(final, intake["redacted_request"])
+        traces.append(trace)
+
         final["redacted_request"] = intake["redacted_request"]
+        final["model_review"] = model_review
         final["agent_trace"] = [item.to_dict() for item in traces]
         final["tool_allowlist"] = self.tools.names
         return final

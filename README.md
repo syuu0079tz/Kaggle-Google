@@ -2,7 +2,7 @@
 
 CareCompass Agent is a small Kaggle capstone project for the **Agents for Good** track. It helps current Monash students in Australia, and staff or peers supporting them, turn a messy support request into a privacy-preserving action plan: identify needs, search a public resource catalog, add safety guardrails, and produce next steps.
 
-The project is intentionally runnable without paid APIs. The core app uses deterministic Python agents and a local JSON catalog of official Monash pages and Australia-wide public support resources. Optional files show how to connect the same design to Google ADK and MCP when those packages are installed.
+The production workflow includes a default Gemini Review Agent. The routing agents first build a plan from a local JSON catalog of official Monash pages and Australia-wide public support resources, then Gemini reviews that already-built plan without creating new resources or contact details. For local testing, the app still runs without a key and reports that the Gemini step was skipped. Optional files also show how to connect the same design to Google ADK and MCP when those packages are installed.
 
 ## Target Audience And Scope
 
@@ -47,6 +47,7 @@ The course documents require a practical AI agent project with a Kaggle Writeup,
 2. **Resource Matcher Agent** calls an allowlisted tool over the local support catalog.
 3. **Planner Agent** turns matches into a concise action plan.
 4. **Safety Reviewer Agent** redacts personal data, detects prompt-injection attempts, and escalates crisis cases to human support.
+5. **Gemini Review Agent** reviews the existing verified plan through Google Gemini when the deployment has `GEMINI_API_KEY` configured. It is part of the default workflow and cannot add new contacts, URLs, or advice.
 
 ## Quick Start
 
@@ -79,6 +80,19 @@ Run local evaluations:
 ```bash
 python scripts/run_evals.py
 ```
+
+## Default Gemini Model Agent
+
+For the final public demo, configure these environment variables in Render, Railway, Cloud Run, or your local shell:
+
+```text
+GEMINI_API_KEY=your Google AI Studio key
+GEMINI_MODEL=gemini-3.5-flash
+```
+
+Do not commit API keys. The model reviewer is deliberately constrained: it receives the redacted request and the already-selected verified resources, then returns a short review. It is not allowed to add new service names, URLs, emails, phone numbers, opening hours, or advice.
+
+If `GEMINI_API_KEY` is missing, the app still opens for local development, but the result page clearly marks the Gemini step as skipped. The Kaggle demo deployment should have the key configured so users can click the site and run the full workflow.
 
 ## Public Demo Deployment
 

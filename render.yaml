@@ -5,3 +5,8 @@ services:
     plan: free
     autoDeploy: true
     healthCheckPath: /
+    envVars:
+      - key: GEMINI_MODEL
+        value: gemini-3.5-flash
+      - key: GEMINI_API_KEY
+        sync: false

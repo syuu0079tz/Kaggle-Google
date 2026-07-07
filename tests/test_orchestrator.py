@@ -26,6 +26,14 @@ class OrchestratorTests(unittest.TestCase):
             {"get_resource", "safety_check", "search_resources"},
         )
 
+    def test_model_review_agent_is_reported_without_api_key(self) -> None:
+        result = run_agent("I need academic help with an assignment.")
+        self.assertEqual(result["model_review"]["status"], "skipped_no_api_key")
+        self.assertIn(
+            "model_review_agent",
+            {trace["agent"] for trace in result["agent_trace"]},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

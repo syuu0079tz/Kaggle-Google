@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 from typing import Any
 
+from .gemini import DEFAULT_GEMINI_MODEL
 from .orchestrator import run_agent
 
 
@@ -28,7 +29,7 @@ def build_root_agent() -> Any:
 
     return Agent(
         name="care_compass_coordinator",
-        model=os.environ.get("GEMINI_MODEL", "gemini-flash-latest"),
+        model=os.environ.get("GEMINI_MODEL", DEFAULT_GEMINI_MODEL),
         instruction=(
             "You are the CareCompass coordinator. Use the create_plan tool for "
             "student or community support navigation. Do not request secrets, "
@@ -48,4 +49,3 @@ if __name__ == "__main__":
     if root_agent is None:
         raise SystemExit("Install optional ADK dependencies to run this entrypoint.")
     print("ADK root_agent is ready: care_compass_coordinator")
-
