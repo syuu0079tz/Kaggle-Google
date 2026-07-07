@@ -183,6 +183,9 @@ def _http_error_summary(exc: HTTPError) -> str:
     except json.JSONDecodeError:
         return _sanitize_error_text(body)
 
+    if not isinstance(payload, dict):
+        return _sanitize_error_text(body)
+
     error = payload.get("error", {})
     message = error.get("message", "") if isinstance(error, dict) else ""
     return _sanitize_error_text(str(message or body))
