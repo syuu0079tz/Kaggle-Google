@@ -5,7 +5,11 @@ import json
 import unittest
 from unittest.mock import patch
 
-from care_compass.gemini import DEFAULT_GEMINI_MODEL, generate_model_review
+from care_compass.gemini import (
+    DEFAULT_GEMINI_MODEL,
+    gemini_api_key_configured,
+    generate_model_review,
+)
 
 
 class FakeResponse:
@@ -46,6 +50,19 @@ class GeminiReviewTests(unittest.TestCase):
         self.assertEqual(review["status"], "ok")
         self.assertIn("fit", review["summary"])
         urlopen_mock.assert_called_once()
+
+    def test_review_accepts_common_google_api_key_env_name(self) -> None:
+        with (
+            patch.dict(os.environ, {"GOOGLE_API_KEY": "test-key"}, clear=True),
+            patch(
+                "care_compass.gemini.urlopen",
+                return_value=FakeResponse({"output_text": "- fit: good"}),
+            ),
+        ):
+            self.assertTrue(gemini_api_key_configured())
+            review = generate_model_review({"recommendations": []}, "redacted request")
+
+        self.assertEqual(review["status"], "ok")
 
     def test_review_blocks_contact_like_model_output(self) -> None:
         with (

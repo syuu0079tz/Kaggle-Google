@@ -26,7 +26,7 @@ gcloud run deploy care-compass-agent \
   --allow-unauthenticated
 ```
 
-Configure `GEMINI_API_KEY` through Cloud Run environment variables or Secret Manager. Set `GEMINI_MODEL=gemini-3.5-flash` unless you intentionally choose another supported Gemini model. Do not commit API keys or passwords to the repository.
+Configure `GEMINI_API_KEY` through Cloud Run environment variables or Secret Manager. The app also accepts `GOOGLE_API_KEY` if your platform already uses that name. Set `GEMINI_MODEL=gemini-3.5-flash` unless you intentionally choose another supported Gemini model. Do not commit API keys or passwords to the repository.
 
 ## Render
 

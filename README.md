@@ -90,7 +90,7 @@ GEMINI_API_KEY=your Google AI Studio key
 GEMINI_MODEL=gemini-3.5-flash
 ```
 
-Do not commit API keys. The model reviewer is deliberately constrained: it receives the redacted request and the already-selected verified resources, then returns a short review. It is not allowed to add new service names, URLs, emails, phone numbers, opening hours, or advice.
+Do not commit API keys. `GEMINI_API_KEY` is preferred, and the app also accepts common Google variable names such as `GOOGLE_API_KEY`. The model reviewer is deliberately constrained: it receives the redacted request and the already-selected verified resources, then returns a short review. It is not allowed to add new service names, URLs, emails, phone numbers, opening hours, or advice.
 
 If `GEMINI_API_KEY` is missing, the app still opens for local development, but the result page clearly marks the Gemini step as skipped. The Kaggle demo deployment should have the key configured so users can click the site and run the full workflow.
 
