@@ -142,7 +142,7 @@ def _sanitize_error_text(text: str) -> str:
 def _http_error_summary(exc: HTTPError) -> str:
     try:
         body = exc.read().decode("utf-8", errors="replace")
-    except OSError:
+    except Exception:
         return ""
 
     try:
@@ -300,6 +300,15 @@ def generate_model_review(
             "status": "model_error",
             "summary": "",
             "message": f"Gemini review unavailable: {type(exc).__name__}.",
+        }
+    except Exception as exc:
+        return {
+            "enabled": True,
+            "provider": "Google Gemini",
+            "model": model,
+            "status": "model_error",
+            "summary": "",
+            "message": f"Gemini review unavailable: unexpected {type(exc).__name__}.",
         }
 
     if not summary:

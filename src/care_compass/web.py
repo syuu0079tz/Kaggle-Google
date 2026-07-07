@@ -474,9 +474,19 @@ class Handler(BaseHTTPRequestHandler):
             if not user_request:
                 self._send(HTTPStatus.BAD_REQUEST, "text/plain; charset=utf-8", b"Missing request")
                 return
-            result = run_agent(user_request)
-            body = json.dumps(result, ensure_ascii=False).encode("utf-8")
-            self._send(HTTPStatus.OK, "application/json; charset=utf-8", body)
+            try:
+                result = run_agent(user_request)
+                body = json.dumps(result, ensure_ascii=False).encode("utf-8")
+                self._send(HTTPStatus.OK, "application/json; charset=utf-8", body)
+            except Exception as exc:
+                body = json.dumps(
+                    {
+                        "error": "agent_runtime_error",
+                        "message": f"{type(exc).__name__}: {exc}",
+                    },
+                    ensure_ascii=False,
+                ).encode("utf-8")
+                self._send(HTTPStatus.INTERNAL_SERVER_ERROR, "application/json; charset=utf-8", body)
             return
 
         if path == "/plan":
