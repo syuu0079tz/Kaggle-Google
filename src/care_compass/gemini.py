@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import traceback
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote
@@ -187,6 +188,16 @@ def _http_error_summary(exc: HTTPError) -> str:
     return _sanitize_error_text(str(message or body))
 
 
+def _unexpected_error_summary(exc: Exception) -> str:
+    frames = traceback.extract_tb(exc.__traceback__)
+    location = ""
+    if frames:
+        last = frames[-1]
+        location = f" at {last.name}:{last.lineno}"
+    error_text = _sanitize_error_text(str(exc))
+    return f"unexpected {type(exc).__name__}{location}" + (f": {error_text}" if error_text else ".")
+
+
 def _post_json(url: str, body: dict[str, Any], api_key: str, timeout_seconds: int) -> dict[str, Any]:
     request = Request(
         url,
@@ -334,17 +345,13 @@ def generate_model_review(
             "message": f"Gemini review unavailable: {type(exc).__name__}.",
         }
     except Exception as exc:
-        error_text = _sanitize_error_text(str(exc))
         return {
             "enabled": True,
             "provider": "Google Gemini",
             "model": model,
             "status": "model_error",
             "summary": "",
-            "message": (
-                f"Gemini review unavailable: unexpected {type(exc).__name__}"
-                + (f": {error_text}" if error_text else ".")
-            ),
+            "message": f"Gemini review unavailable: {_unexpected_error_summary(exc)}",
         }
 
     if not summary:

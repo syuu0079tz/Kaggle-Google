@@ -14,6 +14,7 @@ from urllib.parse import parse_qs, urlparse
 
 from .orchestrator import run_agent
 from .security import redact_pii
+from . import __version__
 
 
 ASSET_ROOT = Path(__file__).resolve().parent / "assets"
@@ -476,6 +477,10 @@ class Handler(BaseHTTPRequestHandler):
                 return
             try:
                 result = run_agent(user_request)
+                result["runtime"] = {
+                    "package_version": __version__,
+                    "render_git_commit": os.environ.get("RENDER_GIT_COMMIT", "")[:8],
+                }
                 body = json.dumps(result, ensure_ascii=False).encode("utf-8")
                 self._send(HTTPStatus.OK, "application/json; charset=utf-8", body)
             except Exception as exc:
