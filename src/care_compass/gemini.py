@@ -29,6 +29,7 @@ GENERATE_CONTENT_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/mo
 URL_RE = re.compile(r"https?://\S+|\bwww\.\S+", re.IGNORECASE)
 EMAIL_RE = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)
 PHONE_RE = re.compile(r"(?<!\d)(?:\+?\d[\d .()/-]{7,}\d)(?!\d)")
+API_KEY_LIKE_RE = re.compile(r"AIza[0-9A-Za-z_-]{20,}")
 
 
 SYSTEM_INSTRUCTION = (
@@ -132,6 +133,28 @@ def _contains_contact_like_text(text: str) -> bool:
     return bool(URL_RE.search(text) or EMAIL_RE.search(text) or PHONE_RE.search(text))
 
 
+def _sanitize_error_text(text: str) -> str:
+    text = API_KEY_LIKE_RE.sub("[REDACTED_API_KEY]", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    return text[:220]
+
+
+def _http_error_summary(exc: HTTPError) -> str:
+    try:
+        body = exc.read().decode("utf-8", errors="replace")
+    except OSError:
+        return ""
+
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError:
+        return _sanitize_error_text(body)
+
+    error = payload.get("error", {})
+    message = error.get("message", "") if isinstance(error, dict) else ""
+    return _sanitize_error_text(str(message or body))
+
+
 def _post_json(url: str, body: dict[str, Any], api_key: str, timeout_seconds: int) -> dict[str, Any]:
     request = Request(
         url,
@@ -199,7 +222,14 @@ def _call_gemini(
         )
         return _extract_output_text(payload), primary_model, "interactions", attempts
     except HTTPError as exc:
-        attempts.append({"route": "interactions", "model": primary_model, "status": exc.code})
+        attempts.append(
+            {
+                "route": "interactions",
+                "model": primary_model,
+                "status": exc.code,
+                "error": _http_error_summary(exc),
+            }
+        )
 
     for model in gemini_candidate_models():
         try:
@@ -211,7 +241,14 @@ def _call_gemini(
             )
             return _extract_output_text(payload), model, "generateContent", attempts
         except HTTPError as exc:
-            attempts.append({"route": "generateContent", "model": model, "status": exc.code})
+            attempts.append(
+                {
+                    "route": "generateContent",
+                    "model": model,
+                    "status": exc.code,
+                    "error": _http_error_summary(exc),
+                }
+            )
 
     return "", primary_model, "unavailable", attempts
 
@@ -267,7 +304,11 @@ def generate_model_review(
 
     if not summary:
         attempt_message = ", ".join(
-            f"{item['route']}:{item['model']}={item['status']}" for item in attempts
+            (
+                f"{item['route']}:{item['model']}={item['status']}"
+                + (f" ({item['error']})" if item.get("error") else "")
+            )
+            for item in attempts
         )
         return {
             "enabled": True,
