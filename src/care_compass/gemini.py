@@ -110,23 +110,51 @@ def _extract_output_text(response: dict[str, Any]) -> str:
     candidates = response.get("candidates", [])
     if isinstance(candidates, list):
         for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
             parts = candidate.get("content", {}).get("parts", [])
             if isinstance(parts, list):
                 text_parts = [
                     part.get("text", "").strip()
                     for part in parts
-                    if isinstance(part.get("text"), str) and part.get("text", "").strip()
+                    if isinstance(part, dict)
+                    and isinstance(part.get("text"), str)
+                    and part.get("text", "").strip()
                 ]
                 if text_parts:
                     return "\n".join(text_parts)
 
+    collected = _collect_text_fields(response)
+    if collected:
+        return "\n".join(collected)
+
     fragments: list[str] = []
     for step in response.get("steps", []):
+        if not isinstance(step, dict):
+            continue
         for item in step.get("output", []):
+            if not isinstance(item, dict):
+                continue
             text = item.get("text")
             if isinstance(text, str):
                 fragments.append(text)
     return "\n".join(fragment.strip() for fragment in fragments if fragment.strip())
+
+
+def _collect_text_fields(value: Any) -> list[str]:
+    collected: list[str] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            if key in {"text", "output_text", "outputText"} and isinstance(child, str):
+                text = child.strip()
+                if text:
+                    collected.append(text)
+            else:
+                collected.extend(_collect_text_fields(child))
+    elif isinstance(value, list):
+        for item in value:
+            collected.extend(_collect_text_fields(item))
+    return collected
 
 
 def _contains_contact_like_text(text: str) -> bool:
@@ -302,13 +330,17 @@ def generate_model_review(
             "message": f"Gemini review unavailable: {type(exc).__name__}.",
         }
     except Exception as exc:
+        error_text = _sanitize_error_text(str(exc))
         return {
             "enabled": True,
             "provider": "Google Gemini",
             "model": model,
             "status": "model_error",
             "summary": "",
-            "message": f"Gemini review unavailable: unexpected {type(exc).__name__}.",
+            "message": (
+                f"Gemini review unavailable: unexpected {type(exc).__name__}"
+                + (f": {error_text}" if error_text else ".")
+            ),
         }
 
     if not summary:
