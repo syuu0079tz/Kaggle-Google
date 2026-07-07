@@ -115,7 +115,8 @@ def _extract_output_text(response: Any) -> str:
         for candidate in candidates:
             if not isinstance(candidate, dict):
                 continue
-            parts = candidate.get("content", {}).get("parts", [])
+            content = candidate.get("content", {})
+            parts = content.get("parts", []) if isinstance(content, dict) else []
             if isinstance(parts, list):
                 text_parts = [
                     part.get("text", "").strip()
