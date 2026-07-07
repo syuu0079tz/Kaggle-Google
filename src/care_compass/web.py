@@ -13,6 +13,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from .orchestrator import run_agent
+from .security import redact_pii
 
 
 ASSET_ROOT = Path(__file__).resolve().parent / "assets"
@@ -464,16 +465,18 @@ class Handler(BaseHTTPRequestHandler):
                 return
             try:
                 result = run_agent(user_request)
+                safe_request = redact_pii(user_request)
                 self._send(
                     HTTPStatus.OK,
                     "text/html; charset=utf-8",
-                    render_page(request_text=user_request, result=result),
+                    render_page(request_text=safe_request, result=result),
                 )
             except Exception as exc:
+                safe_request = redact_pii(user_request)
                 self._send(
                     HTTPStatus.OK,
                     "text/html; charset=utf-8",
-                    render_page(request_text=user_request, error=str(exc)),
+                    render_page(request_text=safe_request, error=str(exc)),
                 )
             return
 
