@@ -102,7 +102,10 @@ def _review_payload(plan: dict[str, Any], redacted_request: str) -> str:
     )
 
 
-def _extract_output_text(response: dict[str, Any]) -> str:
+def _extract_output_text(response: Any) -> str:
+    if not isinstance(response, dict):
+        return "\n".join(_collect_text_fields(response))
+
     output_text = response.get("output_text")
     if isinstance(output_text, str):
         return output_text.strip()
