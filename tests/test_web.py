@@ -17,6 +17,12 @@ class WebRenderingTests(unittest.TestCase):
         self.assertNotIn("1300 22 4636", html)
         self.assertIn("[REDACTED_PHONE]", html)
 
+    def test_page_css_wraps_long_result_text(self) -> None:
+        html = render_page().decode("utf-8")
+        self.assertIn("overflow-wrap: anywhere", html)
+        self.assertIn("white-space: pre-wrap", html)
+        self.assertIn("grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr)", html)
+
 
 if __name__ == "__main__":
     unittest.main()

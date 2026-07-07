@@ -200,6 +200,10 @@ def render_page(
       --amber: #9a6518;
     }}
     * {{ box-sizing: border-box; }}
+    html, body {{
+      max-width: 100%;
+      overflow-x: hidden;
+    }}
     body {{
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
@@ -221,6 +225,11 @@ def render_page(
       color: var(--muted);
       max-width: 900px;
       line-height: 1.45;
+      overflow-wrap: anywhere;
+    }}
+    a, p, li, .meta, .status, .resource, .hint, .privacy-note, .random-tip {{
+      overflow-wrap: anywhere;
+      word-break: normal;
     }}
     .intro, .guide {{
       margin-bottom: 16px;
@@ -271,10 +280,10 @@ def render_page(
     }}
     main {{
       display: grid;
-      grid-template-columns: minmax(340px, 0.9fr) minmax(380px, 1.1fr);
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
       gap: 18px;
       padding: 18px;
-      max-width: 1280px;
+      width: min(100%, 1280px);
       margin: 0 auto;
     }}
     section {{
@@ -282,6 +291,8 @@ def render_page(
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 18px;
+      min-width: 0;
+      max-width: 100%;
     }}
     h2 {{
       margin: 0 0 12px;
@@ -295,6 +306,7 @@ def render_page(
     }}
     textarea {{
       width: 100%;
+      max-width: 100%;
       min-height: 140px;
       resize: vertical;
       border: 1px solid #b9c3d0;
@@ -356,12 +368,15 @@ def render_page(
     .output {{
       display: grid;
       gap: 12px;
+      min-width: 0;
     }}
     .status {{
       border-left: 4px solid var(--green);
       padding: 10px 12px;
       background: #eef8f4;
       color: #174d3a;
+      min-width: 0;
+      max-width: 100%;
     }}
     .warning {{
       border-left-color: var(--amber);
@@ -372,6 +387,8 @@ def render_page(
       border: 1px solid var(--line);
       border-radius: 8px;
       padding: 12px;
+      min-width: 0;
+      max-width: 100%;
     }}
     .resource h3 {{
       margin: 0 0 4px;
@@ -384,22 +401,38 @@ def render_page(
       line-height: 1.45;
     }}
     ul {{
-      margin: 8px 0 0 18px;
-      padding: 0;
+      margin: 8px 0 0;
+      padding-left: 22px;
       line-height: 1.45;
+      max-width: 100%;
+    }}
+    li {{
+      margin-bottom: 6px;
+      padding-right: 4px;
     }}
     pre {{
-      overflow: auto;
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
       background: #101820;
       color: #ecf3f8;
       padding: 12px;
       border-radius: 6px;
-      font-size: 13px;
+      font-size: 12px;
+      line-height: 1.35;
+    }}
+    @media (max-width: 1100px) {{
+      main {{ grid-template-columns: 1fr; }}
     }}
     @media (max-width: 860px) {{
       main {{ grid-template-columns: 1fr; padding: 12px; }}
       header {{ padding: 18px 14px 12px; }}
       .secondary-link {{ margin-left: 0; }}
+      section {{ padding: 14px; }}
     }}
   </style>
 </head>
@@ -426,7 +459,7 @@ def render_page(
     </section>
     <section id="results">
       <h2>Agent Workflow</h2>
-      <img class="flow" src="/assets/flow.svg" alt="CareCompass four-agent workflow">
+      <img class="flow" src="/assets/flow.svg" alt="CareCompass five-agent workflow">
       <div class="output">
         {_result_html(result, error)}
       </div>
