@@ -1,5 +1,7 @@
 # CareCompass Agent
 
+Author: Siyao Yu
+
 ## Subtitle
 
 A privacy-first multi-agent routing assistant for Monash student support resources in Australia.

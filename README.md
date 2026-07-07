@@ -1,5 +1,7 @@
 # CareCompass Agent
 
+Author: Siyao Yu
+
 CareCompass Agent is a small Kaggle capstone project for the **Agents for Good** track. It helps current Monash students in Australia, and staff or peers supporting them, turn a messy support request into a privacy-preserving action plan: identify needs, search a public resource catalog, add safety guardrails, and produce next steps.
 
 The production workflow includes a default Gemini Review Agent. The routing agents first build a plan from a local JSON catalog of official Monash pages and Australia-wide public support resources, then Gemini reviews that already-built plan without creating new resources or contact details. For local testing, the app still runs without a key and reports that the Gemini step was skipped. Optional files also show how to connect the same design to Google ADK and MCP when those packages are installed.

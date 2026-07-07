@@ -439,7 +439,7 @@ def render_page(
 <body>
   <header>
     <h1>CareCompass Agent</h1>
-    <p class="subtitle">A privacy-first multi-agent routing assistant for Monash students in Australia, with a default Gemini review agent for the deployed demo.</p>
+    <p class="subtitle">Created by Siyao Yu. A privacy-first multi-agent routing assistant for Monash students in Australia, with a default Gemini review agent for the deployed demo.</p>
   </header>
   <main>
     <section>
