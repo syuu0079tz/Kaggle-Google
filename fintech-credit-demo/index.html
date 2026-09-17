@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>金融科技信用评分演示程序</title>
+<style>
+body {font-family: "Microsoft YaHei", Arial, sans-serif; margin: 0; background: #f3f6fb; color: #1f2d3d;}
+.header {background: linear-gradient(135deg, #0b2a55, #1f5ea8); color: white; padding: 28px 36px;}
+.header h1 {margin: 0 0 8px 0; font-size: 30px;}
+.header p {margin: 0; opacity: 0.95; line-height: 1.7;}
+.container {max-width: 1180px; margin: 24px auto; padding: 0 18px 28px;}
+.grid {display: grid; grid-template-columns: 1.15fr 1fr; gap: 20px;}
+.card {background: white; border-radius: 16px; box-shadow: 0 8px 24px rgba(20,45,90,0.08); padding: 22px;}
+.card h2 {margin-top: 0; font-size: 22px; color: #123b73;}
+.section-title {font-size: 16px; font-weight: 700; margin: 18px 0 10px; color: #123b73;}
+.form-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px;}
+label {display: block; font-size: 14px; margin-bottom: 6px; color: #4a5d75;}
+input, select {width: 100%; box-sizing: border-box; padding: 11px 12px; border: 1px solid #d0d9e7; border-radius: 10px; font-size: 15px; background: #fff;}
+button {background: #1f5ea8; color: white; border: none; padding: 13px 18px; font-size: 16px; border-radius: 12px; cursor: pointer; margin-top: 14px;}
+button:hover {background: #184d8a;}
+.small {font-size: 13px; color: #70839b; line-height: 1.65;}
+.step-flow {display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; margin-top: 6px;}
+.step {flex: 1 1 120px; min-width: 120px; padding: 14px 12px; background: #edf3fb; border: 2px solid #d8e5f5; border-radius: 12px; text-align: center; transition: all .45s ease;}
+.step .num {display: inline-block; width: 28px; height: 28px; line-height: 28px; border-radius: 50%; background: #cbdcf5; color: #123b73; font-weight: 700; margin-bottom: 8px;}
+.step.active {background: #dff0ff; border-color: #4f97ff; transform: translateY(-4px); box-shadow: 0 8px 16px rgba(79,151,255,0.15);}
+.step.active .num {background: #1f5ea8; color: white;}
+.result-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 14px;}
+.result-box {background: #f7faff; border: 1px solid #e2ebf7; border-radius: 12px; padding: 14px;}
+.result-box strong {display: block; color: #123b73; margin-bottom: 6px;}
+.big-number {font-size: 28px; font-weight: 800; color: #0d4f8b;}
+.good {color: #1e9c50; font-weight: 800;}
+.bad {color: #d13b3b; font-weight: 800;}
+.formula {background: #0f2748; color: #f5f8fd; padding: 14px 16px; border-radius: 12px; line-height: 1.8; margin-top: 14px; font-size: 15px;}
+.footer-note {margin-top: 18px; font-size: 13px; color: #73829b; line-height: 1.7;}
+@media (max-width: 900px){.grid{grid-template-columns:1fr}.form-grid,.result-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>金融科技信用评分演示程序</h1>
+  <p>输入客户信息 → 生成特征 → 计算违约概率 PD → 输出审批决策，并同步计算预期损失 EL。</p>
+</div>
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <h2>① 输入客户信息</h2>
+      <div class="form-grid">
+        <div><label>月收入（元）</label><input id="income" type="number" value="12000"></div>
+        <div><label>月债务支出（元）</label><input id="debt" type="number" value="3000"></div>
+        <div><label>近12个月逾期次数</label><input id="late" type="number" value="1"></div>
+        <div><label>账户历史长度（年）</label><input id="history" type="number" step="0.1" value="3"></div>
+        <div><label>就业稳定性</label>
+          <select id="job"><option value="1" selected>稳定（1）</option><option value="0">不稳定（0）</option></select>
+        </div>
+        <div><label>LGD（损失率，0-1）</label><input id="lgd" type="number" step="0.01" value="0.40"></div>
+        <div><label>EAD（风险暴露金额，元）</label><input id="ead" type="number" value="80000"></div>
+        <div><label>审批阈值（PD）</label><input id="threshold" type="number" step="0.01" value="0.10"></div>
+      </div>
+      <button onclick="runDemo()">开始计算并演示流程</button>
+      <div class="footer-note">
+        说明：这里采用的是教学演示版简化模型，不代表真实银行生产模型。主要用于说明金融科技中“数据—特征—模型—决策”的计算逻辑。
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>② 计算流程动画</h2>
+      <div class="step-flow">
+        <div class="step" id="step1"><div class="num">1</div><div>数据输入</div></div>
+        <div class="step" id="step2"><div class="num">2</div><div>特征工程</div></div>
+        <div class="step" id="step3"><div class="num">3</div><div>模型计算</div></div>
+        <div class="step" id="step4"><div class="num">4</div><div>决策输出</div></div>
+      </div>
+      <div class="formula" id="formulaText">
+        点击“开始计算并演示流程”后，这里会展示关键计算公式与结果说明。
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h2>③ 输出结果</h2>
+    <div class="result-grid">
+      <div class="result-box"><strong>负债收入比 DTI</strong><div class="big-number" id="dtiOut">--</div></div>
+      <div class="result-box"><strong>线性得分 z</strong><div class="big-number" id="zOut">--</div></div>
+      <div class="result-box"><strong>违约概率 PD</strong><div class="big-number" id="pdOut">--</div></div>
+      <div class="result-box"><strong>预期损失 EL = PD × LGD × EAD</strong><div class="big-number" id="elOut">--</div></div>
+      <div class="result-box"><strong>审批决策</strong><div class="big-number" id="decisionOut">--</div></div>
+      <div class="result-box"><strong>程序设计解析</strong><div id="tipOut" style="font-size:16px;line-height:1.8;">--</div></div>
+    </div>
+  </div>
+</div>
+<script>
+function sigmoid(z){ return 1 / (1 + Math.exp(-z)); }
+function resetSteps(){ for(let i=1;i<=4;i++){document.getElementById('step'+i).classList.remove('active');} }
+function activateStep(n, delay){ setTimeout(()=>document.getElementById('step'+n).classList.add('active'), delay); }
+function fmtMoney(x){ return Number(x).toLocaleString('zh-CN', {maximumFractionDigits:2}); }
+function runDemo(){
+  resetSteps();
+  const income = parseFloat(document.getElementById('income').value) || 0;
+  const debt = parseFloat(document.getElementById('debt').value) || 0;
+  const late = parseFloat(document.getElementById('late').value) || 0;
+  const history = parseFloat(document.getElementById('history').value) || 0;
+  const job = parseFloat(document.getElementById('job').value) || 0;
+  const lgd = parseFloat(document.getElementById('lgd').value) || 0;
+  const ead = parseFloat(document.getElementById('ead').value) || 0;
+  const threshold = parseFloat(document.getElementById('threshold').value) || 0.1;
+
+  const dti = income > 0 ? debt / income : 0;
+  const z = -2.6 + 2.8*dti + 0.75*late - 0.9*job - 0.18*history;
+  const pd = sigmoid(z);
+  const el = pd * lgd * ead;
+  const decision = pd < threshold ? '通过 / 可自动审批' : '拒绝或人工复核';
+  const decisionClass = pd < threshold ? 'good' : 'bad';
+
+  activateStep(1, 150); activateStep(2, 650); activateStep(3, 1150); activateStep(4, 1650);
+
+  document.getElementById('dtiOut').innerText = (dti*100).toFixed(2) + '%';
+  document.getElementById('zOut').innerText = z.toFixed(3);
+  document.getElementById('pdOut').innerText = (pd*100).toFixed(2) + '%';
+  document.getElementById('elOut').innerText = fmtMoney(el) + ' 元';
+  document.getElementById('decisionOut').innerHTML = `<span class="${decisionClass}">${decision}</span>`;
+  document.getElementById('tipOut').innerHTML = `
+    1. 程序先读取客户原始变量，并构造关键特征 DTI。<br>
+    2. 再使用教学版逻辑回归公式计算线性得分 z，并经 Sigmoid 映射得到违约概率 PD。<br>
+    3. 同时计算预期损失 EL = PD × LGD × EAD。<br>
+    4. 最后将 PD 与审批阈值比较，输出“通过”或“拒绝/人工复核”的决策结果。`;
+
+  document.getElementById('formulaText').innerHTML = `
+    <strong>教学演示版计算逻辑</strong><br>
+    DTI = 月债务支出 ÷ 月收入 = ${debt} ÷ ${income} = ${(dti*100).toFixed(2)}%<br>
+    z = -2.6 + 2.8×DTI + 0.75×逾期次数 - 0.9×就业稳定性 - 0.18×账户历史年数<br>
+    z = -2.6 + 2.8×${dti.toFixed(4)} + 0.75×${late} - 0.9×${job} - 0.18×${history} = ${z.toFixed(3)}<br>
+    PD = 1 / (1 + e<sup>-z</sup>) = ${(pd*100).toFixed(2)}%<br>
+    EL = PD × LGD × EAD = ${(pd*100).toFixed(2)}% × ${(lgd*100).toFixed(0)}% × ${fmtMoney(ead)} = ${fmtMoney(el)} 元<br>
+    决策规则：若 PD < ${(threshold*100).toFixed(0)}%，则通过；否则拒绝或人工复核。`;
+}
+</script>
+</body>
+</html>
